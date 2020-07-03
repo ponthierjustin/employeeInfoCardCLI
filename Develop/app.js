@@ -12,6 +12,16 @@ const render = require("./lib/htmlRenderer");
 const Employee = require("./lib/Employee");
 const employee = [];
 
+function writeToFile(path, response) {
+  fs.writeFile(path, render(response), "utf-8", function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("successful");
+    }
+  });
+} 
+
 const questions = inquirer
   .prompt([
     {
@@ -25,10 +35,16 @@ const questions = inquirer
     {
       switch (response.role) {
         case "Manager":
-          inquirer.prompt(Manager.managerQuestions).then(response => {
-            const newManager = new Manager.Manager(response.name,response.id, response.email, response.officeNumber);
-            render.hmtl.push(newManager);
-            /* render.renderManager(newManager); */
+          inquirer.prompt(Manager.managerQuestions).then((response) => {
+            const newManager = new Manager.Manager(
+              response.name,
+              response.id,
+              response.email,
+              response.officeNumber
+            );
+            employee.push(newManager);
+            render(employee);
+            writeToFile(outputPath, employee);
           });
           break;
         case "Engineer":
@@ -40,19 +56,7 @@ const questions = inquirer
       }
     }
   });
-/*   .then((data) => writeToFile(`README/${data.title}.md`, data));
-  {
-  }
-  // function to write README file
-  function writeToFile(outputPath, response) {
-    fs.writeFile(outputPath, render(response), "utf-8", function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("successful");
-      }
-    });
-  } */
+ 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
