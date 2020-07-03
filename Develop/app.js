@@ -9,6 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const Employee = require("./lib/Employee");
 const employee = [];
 
 const questions = inquirer
@@ -24,7 +25,11 @@ const questions = inquirer
     {
       switch (response.role) {
         case "Manager":
-          inquirer.prompt(Manager.managerQuestions);
+          inquirer.prompt(Manager.managerQuestions).then(response => {
+            const newManager = new Manager.Manager(response.name,response.id, response.email, response.officeNumber);
+            render.hmtl.push(newManager);
+            /* render.renderManager(newManager); */
+          });
           break;
         case "Engineer":
           inquirer.prompt(Engineer.engineerQuestions);
@@ -35,7 +40,19 @@ const questions = inquirer
       }
     }
   });
-
+/*   .then((data) => writeToFile(`README/${data.title}.md`, data));
+  {
+  }
+  // function to write README file
+  function writeToFile(outputPath, response) {
+    fs.writeFile(outputPath, render(response), "utf-8", function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("successful");
+      }
+    });
+  } */
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
