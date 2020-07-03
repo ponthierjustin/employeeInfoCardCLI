@@ -10,7 +10,6 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const Employee = require("./lib/Employee");
 const employee = [];
 //function to write file to path determined by parameters
 function writeToFile(path, response) {
@@ -22,63 +21,93 @@ function writeToFile(path, response) {
     }
   });
 }
-//prompt to ask role of employee and ask the apporpriate questions
-const askRole = inquirer
-  .prompt([
-    {
-      type: "list",
-      name: "role",
-      message: "Pick your employee role",
-      choices: ["Manager", "Engineer", "Intern"],
-    },
-  ])
-  .then((response) => {
-    {
-      //switch to role questions depending on the response of the user
-      switch (response.role) {
-        case "Manager":
-          inquirer.prompt(questions.managerQuestions).then((response) => {
-            const newManager = new Manager(
-              response.name,
-              response.id,
-              response.email,
-              response.officeNumber
-            );
-            //pushing manager array into empty employee array then calling redner function of the employee
-            employee.push(newManager);
-            render(employee);
-            writeToFile(outputPath, employee);
-          });
-          break;
-        case "Engineer":
-          inquirer.prompt(Engineer.engineerQuestions);
-          break;
-        case "Intern":
-          inquirer.prompt(Intern.internQuestions);
-          break;
+
+// built it into a function to call it again
+function getInfo() {
+  //prompt to ask role of employee and ask the apporpriate questions
+  const askRole = inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "role",
+        message: "Pick your employee role",
+        choices: ["Manager", "Engineer", "Intern"],
+      },
+    ])
+    .then((response) => {
+      {
+        //switch to role questions depending on the response of the user
+        switch (response.role) {
+          case "Manager":
+            inquirer.prompt(questions.managerQuestions).then((response) => {
+              const newManager = new Manager(
+                response.name,
+                response.id,
+                response.email,
+                response.officeNumber
+              );
+
+              employee.push(newManager);
+              addAnother();
+              render(employee);
+              writeToFile(outputPath, employee);
+            });
+            break;
+          case "Engineer":
+            inquirer.prompt(questions.engineerQuestions).then((response) => {
+              const newEngineer = new Engineer(
+                response.name,
+                response.id,
+                response.email,
+                response.github
+              );
+
+              employee.push(newEngineer);
+              addAnother();
+              render(employee);
+              writeToFile(outputPath, employee);
+            });
+            break;
+          case "Intern":
+            inquirer.prompt(questions.internQuestions).then((response) => {
+              const newIntern = new Intern(
+                response.name,
+                response.id,
+                response.email,
+                response.school
+              );
+
+              employee.push(newIntern);
+              addAnother();
+              render(employee);
+              writeToFile(outputPath, employee);
+            });
+            break;
+        }
       }
-    }
-  });
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+    });
+  // Asking user if they would like to add more employees
+  function addAnother() {
+    inquirer
+      .prompt([
+        {
+          type: "confirm",
+          name: "choice",
+          message: "Would you like to add another employee?",
+        },
+      ])
+      .then((response) => {
+        if (response.choice) {
+          getInfo();
+        } else {
+          stop();
+        }
+      });
+  }
+  //function stops function and continues rendering
+  function stop() {
+    process.exit();
+  }
+}
+//call main function
+getInfo();
