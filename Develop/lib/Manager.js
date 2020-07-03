@@ -1,5 +1,4 @@
 const Employee = require("./Employee");
-const inquirer = require("inquirer");
 
 class Manager extends Employee {
   constructor(name, id, email, officeNumber) {
@@ -14,13 +13,31 @@ class Manager extends Employee {
     return this.officeNumber;
   }
 }
-
-module.exports = Manager,
-inquirer.
-prompt([
+const managerQuestions = [
   {
     type: "input",
     name: "officeNumber",
     message: "Give us your office number.",
+    
   },
-]);
+  {
+    type: "input",
+    name: "name",
+    message: "What is your name?",
+  },
+  {
+    type: "input",
+    name: "id",
+    message: "What is your employee id number?",
+  },
+  {
+    type: "input",
+    name: "email",
+    message: "What is your email address",
+  },
+];
+
+module.exports = {
+  Manager,
+  managerQuestions,
+};
