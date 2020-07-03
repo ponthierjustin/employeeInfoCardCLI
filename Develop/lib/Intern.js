@@ -1,5 +1,5 @@
-// TODO: Write code to define and export the Intern class.  HINT: This class should inherit from Employee.
 const Employee = require("./Employee");
+const inquirer = require("inquirer");
 
 class Intern extends Employee {
   constructor(name, id, email, school) {
@@ -14,4 +14,12 @@ class Intern extends Employee {
   }
 }
 
-module.exports = Intern;
+module.exports = Intern
+inquirer.
+prompt([
+  {
+    type: "input",
+    name: "school",
+    message: "What school do you attend?",
+  },
+]);
