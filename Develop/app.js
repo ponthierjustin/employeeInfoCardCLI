@@ -4,14 +4,26 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const questions = require("./lib/questions");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const Employee = require("./lib/Employee");
 const employee = [];
-
-const questions = inquirer
+//function to write file to path determined by parameters
+function writeToFile(path, response) {
+  fs.writeFile(path, render(response), "utf-8", function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("successful");
+    }
+  });
+}
+//prompt to ask role of employee and ask the apporpriate questions
+const askRole = inquirer
   .prompt([
     {
       type: "list",
@@ -22,9 +34,21 @@ const questions = inquirer
   ])
   .then((response) => {
     {
+      //switch to role questions depending on the response of the user
       switch (response.role) {
         case "Manager":
-          inquirer.prompt(Manager.managerQuestions);
+          inquirer.prompt(questions.managerQuestions).then((response) => {
+            const newManager = new Manager(
+              response.name,
+              response.id,
+              response.email,
+              response.officeNumber
+            );
+            //pushing manager array into empty employee array then calling redner function of the employee
+            employee.push(newManager);
+            render(employee);
+            writeToFile(outputPath, employee);
+          });
           break;
         case "Engineer":
           inquirer.prompt(Engineer.engineerQuestions);
