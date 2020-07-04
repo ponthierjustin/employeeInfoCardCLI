@@ -1,3 +1,4 @@
+// Main questions array to pull for switch cases.
 const managerQuestions = [
   {
     type: "input",

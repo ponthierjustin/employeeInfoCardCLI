@@ -46,10 +46,13 @@ function getInfo() {
                 response.email,
                 response.officeNumber
               );
-
+              //push into employee array
               employee.push(newManager);
+              //ask user if they would like to add another employee
               addAnother();
+              //render hmtl
               render(employee);
+              //write to file path and employee rendered html
               writeToFile(outputPath, employee);
             });
             break;
