@@ -22,7 +22,7 @@
   Clone this repository: [Github Repo](https://github.com/ponthierjustin/employeeInfoCardCLI)
 
 
-  
+  ![Alt text](assests\screenshots.png "Optional title")
 
 
   ## Usage
