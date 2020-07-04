@@ -22,12 +22,11 @@
   Clone this repository: [Github Repo](https://github.com/ponthierjustin/employeeInfoCardCLI)
 
 
-  ![Alt text](assests\screenshots.png "Optional title")
-
+   ![screenshot](assests/screenshots.png)
 
   ## Usage
 
-  ![gif](assests\video.gif)
+  ![gif](assests/video.gif)
 
 
   Allows developers to make presentable employee info cards in the command line for their team in a fast and simple way.
